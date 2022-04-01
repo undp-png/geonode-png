@@ -1,0 +1,31 @@
+version: '3.4'
+services:
+
+  django:
+    volumes:
+      - /mnt/efs/fs1/backup_restore:/backup_restore
+      - /mnt/efs/fs1/data:/data
+
+  celery:
+    volumes:
+      - /mnt/efs/fs1/backup_restore:/backup-restore
+      - /mnt/efs/fs1/data:/data
+
+  geoserver:
+    volumes:
+      - /mnt/efs/fs1/geoserver-data-dir:/geoserver_data/data
+      - /mnt/efs/fs1/backup_restore:/backup_restore
+      - /mnt/efs/fs1/data:/data
+
+  data-dir-conf:
+    volumes:
+      - /mnt/efs/fs1/geoserver-data-dir:/geoserver_data/data
+
+  db:
+    volumes:
+      - /mnt/efs/fs1/dbbackups:/pg_backups
+
+  jenkins:
+    volumes:
+      - /mnt/efs/fs1/backup_restore:/backup_restore
+      - /mnt/efs/fs1/data:/data

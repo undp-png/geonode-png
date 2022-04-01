@@ -1,0 +1,25 @@
+{% load i18n %}
+{% if iso_formats %}
+  <div class="container">
+    <div class="row">
+      <h2>{% trans "Explore the data" %}</h2>
+      <div class="icon-group">
+        {% for iso_format in iso_formats %}
+        <div class="category" data-toggle="tooltip" data-placement="auto">
+          <a href="/search/?limit=100&amp;offset=0&amp;category__identifier__in={{iso_format.category__identifier }}">
+            <div class="dataset-logos" style="position: relative;">
+              {% if iso_format.category__fa_class == "custom" %}
+              <img src="/static/img/icons/{{iso_format.category__identifier }}.png" />
+              <div class="faux-div"></div>
+              {% else %}
+              <i class="fa {{ iso_format.category__fa_class }} fa-3x default-img"></i>
+              {% endif %}
+              <h5>{% trans iso_format.category__gn_description %}</h5>
+            </div>
+          </a>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+{% endif %}

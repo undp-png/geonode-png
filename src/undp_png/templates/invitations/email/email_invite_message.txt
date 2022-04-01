@@ -1,0 +1,13 @@
+{% load i18n %}
+{% autoescape off %}
+{% blocktrans %}Welcome!,{% endblocktrans %}
+
+{{ inviter_name }} is inviting you to join the Biodiversity and Climate Geoportal({{ site_name|urlencode }}).
+
+Please register at {{ invite_url }} .
+
+{% blocktrans %}Regards,{% endblocktrans %}
+
+{% blocktrans %}Biodiversity and Climate Geoportal{% endblocktrans %}
+
+{% endautoescape %}

@@ -1,0 +1,1 @@
+INSERT into geoapp_geostories_geostory SELECT resourcebase_ptr_id, 'GeoStory' from geoapps_geoapp WHERE resourcebase_ptr_id not in (SELECT geoapp_ptr_id from geoapp_geostories_geostory);

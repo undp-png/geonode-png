@@ -1,0 +1,33 @@
+{% load i18n %}
+{% load static from staticfiles %}
+{% load undp_extras %}
+
+{% block extra_head %}
+<link href="{% static "geonode/css/social_twitter.css" %}" rel="stylesheet" />
+{% endblock %}
+
+{% block social_links %}
+	<article class="tab-pane" id="share">
+        <!-- TODO: Move this to a reusable template snippet -->
+        <header>
+            {% with resource.resource_type|title as resource_type %}
+            <h3>{% trans "Share This" %} {% trans resource_type %} </h3>
+            {% endwith %}
+        </header>
+        <div>
+              <ul class="social">
+                  {% for social_link in social_links %}
+                      {% if social_link.url %}
+                        {% if 'maps' in social_link.url %}
+                        <li><a href="{{ social_link.url }}/view#/" class="{{ social_link.css_class }}">{{ social_link.label }}</a></li>
+                        {% elif 'apps' in social_link.url %}
+                        <li><a href="{% regex_replace social_link.url  'preview/(\d+)' '\1/view#/' %}" class="{{ social_link.css_class }}">{{ social_link.label }}</a></li>
+                        {% else %}
+                        <li><a href="{{ social_link.url }}" class="{{ social_link.css_class }}">{{ social_link.label }}</a></li>
+                        {% endif %}
+                      {% endif %}
+                  {% endfor %}
+              </ul>
+         </div>
+    </article>
+{% endblock %}

@@ -1,0 +1,252 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% load i18n avatar_tags %}
+{% load static from staticfiles %}
+{% load account socialaccount %}
+{% load base_tags %}
+
+{% block extra_head %}
+
+<title>{% block title %}Biodiversity and Climate Geoportal {% endblock %}</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link
+  href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@400;700&family=Roboto:wght@300;400;500;700&display=swap"
+  rel="stylesheet">
+<link href="{{ STATIC_URL }}css/site_base.css" rel="stylesheet" />
+
+<!-- Add favicons below -->
+<link rel="shortcut icon" href="{% static 'favicon.ico' %}" type="image/x-icon"/>
+<link rel="icon" href="{% static 'favicon.ico' %}" type="image/x-icon">
+<!-- Add google analytics below -->
+{% endblock %}
+
+<!-- Navbar -->
+{% block header %}
+<nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+  <div class="nav-container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar"
+        aria-expanded="false" aria-controls="navbar">
+        <i class="fa fa-navicon fa-lg"></i>
+      </button>
+      <a href="{% url "home" %}" class="navbar-title">
+          <div class="navbar-title-inner">Biodiversity and Climate Geoportal</div>
+      </a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav toolbar">
+
+        {% block tabs %}
+        <li><a href="{% url "about" %}">{% trans "About" %}</a></li>
+        <li id="nav_layers">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+            aria-expanded="false">{% trans "Data" %}<i class="fa fa-angle-down fa-lg"></i></a>
+          <ul class="dropdown-menu">
+            <li><a href="{% url "layer_browse" %}?limit={{ CLIENT_RESULTS_LIMIT }}">{% trans "Layers" %}</a></li>
+            <li><a href="{% url "document_browse" %}?limit={{ CLIENT_RESULTS_LIMIT }}">{% trans "Documents" %}</a></li>
+            <li><a href="{% url "services" %}?limit={{ CLIENT_RESULTS_LIMIT }}">{% trans "Remote Services" %}</a></li>
+            {% if user.is_authenticated and not READ_ONLY_MODE %}
+            <li role="separator" class="divider"></li>
+            <li><a href="{% url "layer_upload" %}">{% trans "Upload Layer" %}</a></li>
+            {% if USE_GEOSERVER and CREATE_LAYER %}
+            <li><a href="{% url "layer_create" %}">{% trans "Create Layer" %}</a></li>
+            {% endif %}
+            <li><a href="{% url "document_upload" %}">{% trans "Upload Document" %}</a></li>
+            {% endif %}
+            {% if user.is_superuser or user.is_staff %}
+            {% if not READ_ONLY_MODE %}
+            <li><a href="{% url "register_service" %}">{% trans "Add Remote Service" %}</a></li>
+            {% endif %}
+            {% endif %}
+          </ul>
+        </li>
+        <li id="nav_maps">
+          {% if user.is_authenticated %}
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+            aria-expanded="false">{% trans "Maps" %}<i class="fa fa-angle-down fa-lg"></i></a>
+          <ul class="dropdown-menu">
+            <li><a href="{% url "maps_browse" %}?limit={{ CLIENT_RESULTS_LIMIT }}">{% trans "Explore Maps" %}</a></li>
+            {% if not READ_ONLY_MODE %}
+            <li> <a href="{% url "new_map" %}">{% trans "Create Map" %}</a></li>
+            {% endif %}
+          </ul>
+          {% else %}
+          <a href="{% url "maps_browse" %}?limit={{ CLIENT_RESULTS_LIMIT }}">{% trans "Maps" %}</a>
+          {% endif %}
+        </li>
+        {% if GEONODE_APPS_ENABLE and GEONODE_APPS_NAV_MENU_ENABLE %}
+        <li id="nav_maps">
+          {% if user.is_authenticated %}
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+            aria-expanded="false">{% trans "Stories" %}<i class="fa fa-angle-down fa-lg"></i></a>
+          <ul class="dropdown-menu">
+            <li><a href="{% url "apps_browse" %}?limit={{ CLIENT_RESULTS_LIMIT }}">{% trans "Explore" %} {% trans "Stories" %}</a></li>
+          </ul>
+          {% else %}
+          <a href="{% url "apps_browse" %}?limit={{ CLIENT_RESULTS_LIMIT }}&app_type__in=GeoStory">{% trans "Stories" %}</a>
+          {% endif %}
+        </li>
+        {% endif %}
+
+        {% block extra_tab %}
+
+        {% endblock %}
+
+        {% endblock %}
+
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+
+        {% block my_extra_right_tab %}
+        {% render_nav_menu 'TOPBAR_MENU' %}
+        {% endblock my_extra_right_tab %}
+
+        <li>
+          <div class="search">
+            <form id="search" action="{% url "search" %}">
+              <span class="fa fa-search"></span>
+              <div id="search-container" class="autocomplete-input">
+                {% if HAYSTACK_SEARCH %}
+                <input autocomplete="off" id="search_input" type="text" placeholder="{% trans 'Search' %}" name="q">
+                <input type="hidden" name="abstract__icontains" id="search_abstract_input"
+                  placeholder="{% trans 'Search' %}">
+                <input type="hidden" name="purpose__icontains" id="search_purpose_input"
+                  placeholder="{% trans 'Search' %}">
+                <input type="hidden" name="f_method" id="filtering_type" value="or">
+                {% else %}
+                <input autocomplete="off" type="text" name="title__icontains" id="search_input"
+                  placeholder="{% trans 'Search' %}">
+                <input type="hidden" name="abstract__icontains" id="search_abstract_input"
+                  placeholder="{% trans 'Search' %}">
+                <input type="hidden" name="purpose__icontains" id="search_purpose_input"
+                  placeholder="{% trans 'Search' %}">
+                <input type="hidden" name="f_method" id="filtering_type" value="or">
+                {% endif %}
+              </div>
+            </form>
+          </div>
+        </li>
+        
+        {% if not user.is_authenticated and ACCOUNT_OPEN_SIGNUP and not READ_ONLY_MODE %}
+        <li><a href="{% url "account_signup" %}">{% trans "Register" %}</a></li>
+        {% endif %}
+        {% if user.is_authenticated %}
+        <li>
+          <a href="#" class="dropdown-toggle avatar" data-toggle="dropdown" role="button" aria-haspopup="true"
+            aria-expanded="false">
+            {% autoescape off %}{% avatar user 40 %}{% endautoescape %}
+            {% with full_name=user.first_name|add:' '|add:user.last_name %}
+            {% if full_name.strip %}
+            {{ full_name | truncatechars:20 }}
+            {% else %}
+            {{ user.username | truncatechars:20 }}
+            {% endif %}
+            {% endwith %}
+            <i class="fa fa-angle-down fa-lg"></i>
+          </a>
+          <ul class="dropdown-menu">
+            <li><a href="{{ user.get_absolute_url }}">{% trans "Profile" %}</a></li>
+            <li><a href="{% url "recent-activity" %}">{% trans "Recent Activity" %}</a></li>
+            {% if FAVORITE_ENABLED and user.is_authenticated %}
+            <li><a href="{% url "favorite_list" %}">{% trans "Favorites" %}</a></li>
+            {% endif %}
+            <li><a href="{% url "messages_inbox" %}">{% trans "Inbox" %}</a></li>
+            {% if user.is_superuser or user.is_staff %}
+            <li role="separator" class="divider"></li>
+            <li><a href="{% url "admin:index" %}">{% trans "Admin" %}</a></li>
+            {% if 'geonode.geoserver' in INSTALLED_APPS %}
+            <li><a href="{{ OGC_SERVER.default.WEB_UI_LOCATION }}">GeoServer</a></li>
+            {% endif %}
+            {% if USE_MONITORING %}
+            <li role="separator" class="divider"></li>
+            <li><a href="{% url "monitoring:index" %}">{% trans "Monitoring & Analytics" %}</a></li>
+            {% endif %}
+            {% endif %}
+            <li role="separator" class="divider"></li>
+            <li><a href="{% url "help" %}">{% trans "Help" %}</a></li>
+            <li role="separator" class="divider"></li>
+            <li><a href="{% if SITEURL|default:""|slice:"-1:" == "/" %}{{SITEURL}}{% else %}{{SITEURL}}/{% endif %}account/logout/">{% trans "Log out" %}</a></li>
+          </ul>
+        </li>
+        {% else %}
+        <li><a href="#" data-toggle="modal" data-target="#SigninModal" role="button">{% trans "Sign in" %} </a></li>
+        {% endif %}
+      </ul>
+    </div>
+    <!--/.nav-collapse -->
+  </div>
+</nav>
+{% endblock header %}
+<!-- End of Navbar -->
+
+{% block footer %}
+<footer>
+  <div class="container">
+    <div class="row">
+      {% if not request.user_agent.is_mobile %}
+      <div class="col-md-2">
+        <div style="margin-bottom: 20px;">
+          <img class="footer-logo" src="{% static 'img/undp_sm.png' %}" alt="UNDP logo">
+        </div>
+      </div>
+        <div class="col-md-3">
+          <ul class="list-unstyled">
+            <li class="menu-header">{% trans "Data" %}</li>
+            <li><a href="{% url "layer_browse" %}?limit={{ CLIENT_RESULTS_LIMIT }}">{% trans "Layers" %}</a></li>
+            <li><a href="{% url "document_browse" %}?limit={{ CLIENT_RESULTS_LIMIT }}">{% trans "Documents" %}</a></li>
+            <li><a href="{% url "services" %}?limit={{ CLIENT_RESULTS_LIMIT }}">{% trans "Remote Services" %}</a></li>
+            {% if user.is_authenticated and not READ_ONLY_MODE %}
+                <li role="separator" class="divider"></li>
+                <li><a href="{% url "layer_upload" %}">{% trans "Upload Layer" %}</a></li>
+                {% if USE_GEOSERVER and CREATE_LAYER %}
+                    <li><a href="{% url "layer_create" %}">{% trans "Create Layer" %}</a></li>
+                {% endif %}
+                <li><a href="{% url "document_upload" %}">{% trans "Upload Document" %}</a></li>
+            {% endif %}
+            {% if user.is_staff or user.is_superuser %}
+              {% if not READ_ONLY_MODE %}
+                <li><a href="{% url "register_service" %}">{% trans "Add Remote Service" %}</a></li>
+              {% endif %}
+            {% endif %}
+          </ul>
+        </div>
+        <div class="col-md-3">
+          <ul class="list-unstyled">
+            <li class="menu-header">{% trans "Maps" %}</li>
+            <li><a href="{% url "maps_browse" %}?limit={{ CLIENT_RESULTS_LIMIT }}">{% trans "Explore Maps" %}</a></li>
+            {% if user.is_authenticated and not READ_ONLY_MODE %}
+              <li> <a href="{% url "new_map" %}">{% trans "Create Map" %}</a></li>
+            {% endif %}
+          </ul>
+        <ul class="list-unstyled">
+            <li class="menu-header">Further info</li>
+            <li><a href="{% url "about" %}">{% trans "About" %}</a></li>
+            <li><a href="{% url "faqs" %}">FAQs</a></li>
+          </ul>
+        </div>
+        <div class="col-md-3">
+          <ul class="list-unstyled">
+            <li class="menu-header">{% trans "Users" %}</li>
+            <li><a href="{% url "profile_browse" %}">{% trans "People" %}</a></li>
+            <li><a href="{% url "group_list" %}">{% trans "Groups" %}</a></li>
+            {% if perms.announcements.can_manage %}
+            <li><a href="{% url "announcements_list" %}">{% trans "Announcements" %}</a></li>
+            {% endif %}
+            {% if user.is_authenticated and not READ_ONLY_MODE %}
+            <li><a href="{% url "geonode.invitations:geonode-send-invite" %}">{% trans "Invite Users" %}</a></li>
+            {% endif %}
+            {% if user.is_superuser and not READ_ONLY_MODE %}
+            <li><a href="{% if SITEURL|default:""|slice:"-1:" == "/" %}{{SITEURL}}{% else %}{{SITEURL}}/{% endif %}admin/people/profile/add/">{% trans "Add User" %}</a></li>
+            <li><a href="{% url "group_create" %}">{% trans "Create Group" %}</a></li>
+            {% endif %}
+          </ul>
+        </div>
+      {% endif %}
+      
+    </div>
+  </div>
+</footer>
+<div style="font-size: 0.75rem; text-align: center;">This web portal is based on the GeoNode open-source geospatial infrastructure.</div>
+{% endblock footer %}

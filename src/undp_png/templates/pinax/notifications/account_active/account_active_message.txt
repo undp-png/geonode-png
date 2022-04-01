@@ -1,0 +1,4 @@
+{% load i18n %}
+{% trans "Your account has been approved and is now active." %}
+Your username: {{ username }}
+You can use the "Sign In" link at http://{{ current_site.name }} to log in to your account.

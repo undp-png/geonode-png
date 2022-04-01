@@ -1,0 +1,124 @@
+<!-- {% extends "geonode_base.html" %} -->
+
+{% load i18n %}
+{% load static %}
+
+{% block title %} {% trans "About" %} — {{ block.super }} {% endblock %}
+{% block body_class %}about{% endblock %}
+
+
+{% block body_outer %}
+<div class="about-header">
+  <div class="inner-header">
+    <h1 class="main-title">Protecting Papua New Guinea’s Biodiversity by Building a Home for its Environmental Data</h1>
+    <p class="subtitle">The Biodiversity and Climate Geoportal helps improves policymaking and investments while opening
+      a pathway for communities to seek funding and technical support.</p>
+  </div>
+</div>
+
+
+<div class="block-white">
+  <div class="container">
+    <p>Papua New Guinea (PNG) is one of the world’s most biodiverse areas, lush with virgin rainforests and minerals,
+      and teeming with wildlife, flora and marine habitats. Sustainable natural resource management underpins most lives
+      and livelihoods. Yet as recently as 2021, there were only 62 designated Protected Areas (PAs), covering barely 4%
+      (or about 18,700 sq kms) of PNG’s land area — Fewer than 15% of of them could access financial or technical
+      support. </p>
+    <p>With the Biodiversity and Climate Geoportal, not only will PNG get a centralised repository for all its
+      environmental spatial and non-data but also a pathway will open up for environment stakeholders to seek funds and
+      technical support, and communicate about their progress towards commitments.</p>
+  </div>
+</div>
+
+<section class="block-red">
+  <div class="container">
+
+    <h2>The Biodiversity and Climate Geoportal: A many-handed resource</h2>
+    <p>
+      The Biodiversity and Climate Geoportal (BCG) is a participatory, open-source tool set up by UNDP under the aegis
+      of the PNG <a href="http://www.png-nrmhub.org">Natural Resource Management (NRM) Hub</a>. The BCG enables
+      policymakers, community members, technical specialists and a range of other stakeholders to access data on PNG’s
+      natural environment. Crucially, it is also integrated with the grantmaking and reporting process for the
+      Biodiversity and Climate Fund, a channel that will make financial and technical support available to PNG
+      landowners and PA committees.</p>
+  </div>
+</section>
+
+<section class="block-graphics">
+  <div class="container">
+    <h2>The Biodiversity and Climate Geoportal is designed as:</h2>
+    <div class="image-grid">
+
+      <div class="img-group">
+        <img src="{% static 'img/1_portal.png' %}" alt="">
+        <p>
+          A <span class="upper">web portal</span> for accessing spatial and non-spatial data on Papua New Guinea’s
+          environment and Biodiversity and Climate Fund projects.
+        </p>
+      </div>
+      <div>
+        <img src="{% static 'img/2_space.png' %}" alt="">
+        <p>
+          An <span class="upper">interactive resource</span> for grantees, grantors, specialist organizations, academic
+          institutions and local projects to upload, share and develop information as a tool for communication and
+          advocacy
+        </p>
+      </div>
+      <div>
+        <img src="{% static 'img/3_support.png' %}" alt="">
+        <p>
+          A <span class="upper">decision-support tool</span> for policy makers, civil society organisations and other
+          stakeholders who are interested in data-driven planning, policies and investments in PNG’s environment.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="challenges">
+  <div class="container">
+    <h3>Challenges and Opportunities</h3>
+    <p>
+      Policymakers, technical teams and others working on environmental issues need reliable, up-to-date and granular
+      local information to help them develop data-driven environment policies and investment plans for NRM. However,
+      access to high-quality, localized analytics has been a long-standing problem. Another challenge that is finally
+      being addressed by the BCG is teasing local insights and guidance out of the growing body of global
+      environmental data, to strengthen PNG’s environmental decision-making.
+    </p>
+    <p>Meanwhile, opportunities are growing apace. Digitalization has transformed how we measure, map and understand
+      our environment. Satellite imagery can track deforestation to the level of individual trees and record
+      coral-bleaching events in real time. Digitalized environmental datasets are helping pinpoint and analyze
+      problems as they unfold, giving new muscles to interventions.</p>
+    <p>Aggregating high-quality global datasets with locally generated data and insights also democratises knowledge
+      by making it available to everyone, increasing the transparency of NRM. Spatial data such as maps represent a
+      particularly engaging format for decision-making because they easily transcend language and cultural barriers.
+    </p>
+    <p>Many of these environmental datasets are produced by premier research institutions such as the IUCN, UNEP-WCMC,
+      World Resources Institute and more, and may be accessed at no cost. The challenge remains visualizing this data
+      in an actionable manner alongside local insights. </p>
+  </div>
+</section>
+
+<section class="block-blue">
+  <div class="container">
+    <h2>The UNDP Papua New Guinea Natural Resource Management Hub </h2>
+    <p>The UNDP Natural Resource Management Hub is home to a range of support tools such as the Biodiversity and Climate
+      Geoportal, the Bougainville Natural Resource Portal and the Lukim Gather app, which PNG’s policymakers, civil
+      society organizations and other stakeholders can use to make informed decisions on policies, investments and
+      livelihoods. Collating and aggregating data from a wide range of sources, the NRM Hub can help with project
+      planning, reporting and the evaluation of natural resource management processes.
+    </p>
+    <a href="http://www.png-nrmhub.org">Visit the UNDP NRM Hub</a>
+
+  </div>
+</section>
+
+<div class="questions-block">
+  <div class="container">
+    <h3>Have questions?</h3>
+    <p>Contact us at <a href="mailto:png.im@undp.org ">png.im@undp.org </a></p>
+  </div>
+</div>
+
+
+{% endblock %}

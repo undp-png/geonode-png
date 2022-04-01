@@ -1,0 +1,218 @@
+{% extends 'index.html' %}
+{% load markdownify %}
+{% load i18n %}
+{% load base_tags %}
+{% load static %}
+{% load undp_extras %}
+
+
+{% block title %} Biodiversity and Climate Geoportal {% endblock %}
+
+
+{% block hero %}
+  <div class="jumbotron">
+    <div class="inner-jumbotron">
+      <p class="main-title">Biodiversity and Climate Geoportal</p>
+      <p class="subtitle">Connecting You to Papua New Guinea’s Environmental Maps and Data
+        </p>
+    </div>
+  </div>
+{% endblock hero %}
+
+{% block mainbody %}
+
+<section id="about">
+  <div class="container text-center">
+    <p style="font-size: 1.125rem; margin-bottom: 2.125rem;">The Biodiversity and Climate Geoportal is a gateway into a world of user-friendly, open-access data to help policymakers and stakeholders in Papua New Guinea (PNG) to make informed environmental policies and investments</p>
+    <p>
+      Papua New Guinea, home to 5% of the world’s biodiversity in just 1% of its land mass, guards a breathtaking trove of natural resources including virgin rainforests, coral reefs, flora and fauna. PNG’s Biodiversity and Climate Geoportal (BCG) is an online tool for better natural resource management (NRM). Developed by UNDP under the aegis of PNG’s <a href="http://www.png-nrmhub.org">Natural Resource Management (NRM) Hub</a> to support policymakers and other stakeholders with NRM data for making better policies and investments. </p>
+      <p>
+      The BCG is built using Geonode, an open-source, web-based platform for developing geospatial information systems, and will provide policymakers and other stakeholders with NRM data for making better policies and investments. 
+      </p>
+  </div>
+</section>
+
+  <section id="featured" class="featured">
+    <div ng-app="featured" ng-if="featured.length > 0" ng-cloak>
+      <div class="featured-stories-inner">
+        <div ng-if="featured | getTypeApps" class="container stories" >
+          <h2 class="text-center">{% trans "Featured Stories" %}</h2>
+          <div class="featured-group-wrapper">
+            {% verbatim %}
+            <div ng-repeat="item in featured" ng-if="item.detail_url.split('/',2)[1] === 'apps'" >
+              <h4>
+                {{ item.title | limitTo: 20 }}{{item.title.length > 20 ? '...' : ''}}
+              </h4>
+              <div class="image-group">
+                  <div class="featured-img-wrapper">
+                    <img ng-src="{{ item.thumbnail_url }}"/>
+                    <div class="item-overlay top">{{ item.abstract | filter | stripHtml | limitTo: 90 }}{{item.abstract.length > 90 ? '...' : ''}}</div>
+                  </div>
+                  <div class="button-wrapper">
+                    <a class="button" href="/apps/{{ item.id }}/view#">Read more</a>
+                  <div>
+              </div>
+              <div>
+              </div>
+            </div>
+            {% endverbatim %}
+          </div>
+        </div>
+      </div>
+
+      <div class="featured-data-inner">
+        <div ng-if="featured | getTypeAll" class="container data">
+          <h2 class="text-center">{% trans "Featured Data" %}</h2>
+          <div class="featured-group-wrapper">
+            {% verbatim %}
+            <div ng-repeat="item in featured" ng-if="item.detail_url.split('/',2)[1] !== 'apps'">
+              <h4>
+                {{ item.title | limitTo: 20 }}{{item.title.length > 20 ? '...' : ''}} 
+                <span class="data-type">({{ item.detail_url.split('/',2)[1].slice(0, -1) }})</span>
+              </h4>
+              <div class="image-group">
+                <a href="{{ item | getUrl }}">
+                  <div class="featured-img-wrapper">
+                    <img ng-src="{{ item.thumbnail_url }}"/>
+                    <div class="item-overlay top">{{ item.abstract | filter | stripHtml | limitTo: 90 }}{{item.abstract.length > 90 ? '...' : ''}}</div>
+                  </div>
+                </a>
+                <div class="button-wrapper">
+                  <a class="button" href="{{ item | getUrl }}">View</a>
+                </div>
+              </div>
+            </div>
+            {% endverbatim %}
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="services">
+    <div class="container">
+      <h2>What you can do at the Biodiversity and Climate Geoportal </h2>
+      <div class="services-wrapper">
+        <div>
+          <h4>View the interactive data catalogue</h4>
+          <p>You can browse through spatial and non-spatial data which can be viewed in browser, or streamed into desktop GIS software.</p>
+        </div>
+        <div>
+          <h4>Create user accounts</h4>
+          <p>Registering for the platform will allow you to be added to user groups, and also unlock functionalities such as uploading, editing and sharing private data.</p>
+        </div>
+        <div>
+          <h4>Download data</h4>
+          <p>You can download public datasets, and also stream and integrate them into existing platforms.</p>
+        </div>
+        <div>
+          <h4>Create customized maps</h4>
+          <p>As a registered user, you will be able to create customized maps from layers from within the Geoportal and download and integrate them directly into reports.
+          </p>
+        </div>
+        <div>
+          <h4>Work with interactive data products</h4>
+          <p>You can work with tools like GeoStories to  integrate text, multimedia and data to reach a wide audience, with dashboards to monitor progress.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  {% block datasets %}
+    <section id="datasets">
+      {% get_visible_resources_custom request.user %}
+    </section>
+  {% endblock datasets %}
+
+  <section class="learn">
+    <div class="container">
+        <div class="learn-inner">
+          <div><img src="{% static 'img/4_learn.png' %}" alt=""></div>
+          <div >
+            <h3>Learn how to use the <br>Biodiversity and Climate Geoportal</h3>
+            <p>A curriculum for using this tool will be made available for technical focal points to learn how to upload, use, and develop data on this website.</p>
+          </div>
+        </div>
+    </div>
+  </section>
+
+  {% block bigsearch %}
+    <div class="big-search">
+      <div class="container">
+        <h3 style="text-align: center;">Search the Geoportal</h3>
+        <div class="search">
+          <form id="main_search" action="{% url "search" %}">
+            <span class="fa fa-search fa-3x" style="font-size: 2em;"></span>
+            {% if HAYSTACK_SEARCH %}
+              <input id="main_search_input" style="font-size: 1em;" type="text" placeholder="{% trans 'Search' %}"
+                     class="form-control" name="q" autocomplete="off">
+              <input type="hidden" name="abstract__icontains" id="main_search_abstract_input"
+                     placeholder="{% trans 'Search' %}">
+              <input type="hidden" name="purpose__icontains" id="main_search_purpose_input"
+                     placeholder="{% trans 'Search' %}">
+              <input type="hidden" name="f_method" id="main_filtering_type" value="or">
+            {% else %}
+              <input id="main_search_input" style="font-size: 1em;" type="text" placeholder="{% trans 'Search' %}"
+                     class="form-control" autocomplete="off" name="title__icontains">
+              <input type="hidden" name="abstract__icontains" id="main_search_abstract_input">
+              <input type="hidden" name="purpose__icontains" id="main_search_purpose_input">
+              <input type="hidden" name="f_method" id="main_filtering_type" value="or">
+            {% endif %}
+          </form>
+        </div>
+        <p><a style="font-size: 1em;" class="btn btn-default btn-lg"
+              href="{% url "search" %}">{% trans "Advanced Search" %}</a></p>
+      </div>
+    </div>
+  {% endblock bigsearch %}
+
+
+{% endblock mainbody %}
+
+{% block extra_script %}
+  {{ block.super }}
+  <script type="text/javascript">
+    'use strict';
+    FEATURED_URL = '{% url 'api_dispatch_list' api_name='api' resource_name='featured' %}';
+    (function () {
+      var module = angular.module('featured', [])
+      module.filter('getUrl', function () {
+        return function (input) {
+          if (input.detail_url.split('/',2)[1] === 'maps') {
+            return `${input.detail_url}/view#`
+          } else {
+            return input.detail_url
+          }
+        }
+      });
+      module.filter('getTypeApps', function () {
+        return function (input, type) {
+          return input.some(x => x.detail_url.split('/',2)[1] === 'apps')
+        }
+      });
+      module.filter('getTypeAll', function () {
+        return function (input, type) {
+          return input.some(x => x.detail_url.split('/',2)[1] !== 'apps')
+        }
+      });
+      module.filter('stripHtml', function () {
+        return function (input) {
+          const doc = new DOMParser().parseFromString(input, 'text/html');
+          return doc.body.textContent || '';
+        };
+      });
+      module.run(function ($http, $rootScope) {
+        $http.get(FEATURED_URL).then(successCallback, errorCallback);
+
+        function successCallback(data) {
+          //success code
+          $rootScope.featured = data.data.objects;
+        };
+
+        function errorCallback(error) {
+          //error code
+        };
+      });
+    })();
+  </script>
+{% endblock %}
