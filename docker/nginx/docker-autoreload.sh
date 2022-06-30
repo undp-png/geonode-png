@@ -24,6 +24,15 @@ do
                 ln -sf "/geonode-certificates/autoissued" /certificate_symlink
         fi
 
+        rm -f /certificate_symlink_www
+        if [ -f "/geonode-certificates/$LETSENCRYPT_MODE/live/www.$HTTPS_HOST/fullchain.pem" ] && [ -f "/geonode-certificates/$LETSENCRYPT_MODE/live/www.$HTTPS_HOST/privkey.pem" ]; then
+                echo "Certbot certificate exists, we symlink to the live cert"
+                ln -sf "/geonode-certificates/$LETSENCRYPT_MODE/live/www.$HTTPS_HOST" /certificate_symlink_www
+        else
+                echo "Certbot certificate does not exist, we symlink to autoissued"
+                ln -sf "/geonode-certificates/autoissued" /certificate_symlink_www
+        fi
+
         # Test nginx configuration
         nginx -t
         # If it passes, we reload

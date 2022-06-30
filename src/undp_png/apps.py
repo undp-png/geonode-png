@@ -63,6 +63,7 @@ class AppConfig(BaseAppConfig):
         from geonode.geoapps.forms import GeoAppForm
         from geonode.layers.forms import LayerForm
         from geonode.maps.forms import MapForm
+        from geonode.people.admin import ProfileAdmin
 
         from geonode.base.api.serializers import ThumbnailUrlField
         from geonode.api.resourcebase_api import CommonModelApi, LayerResource, MapResource, GeoAppResource, \
@@ -80,6 +81,7 @@ class AppConfig(BaseAppConfig):
         self.patch_thumb_serializer(ThumbnailUrlField)
         self.patch_invite_function(GeoNodeSendInvite)
         self.add_mapbox_wmts_sources(GeoNodeMapStore2ConfigConverter)
+        self.patch_profile_admin_actions(ProfileAdmin)
 
     def patch_resource_base(self, form):
         self._get_logger().info("Patching Resource Base")
@@ -498,7 +500,10 @@ class AppConfig(BaseAppConfig):
         map_model.format_objects = format_objects
 
     def patch_thumb_serializer(self, thumbnailserializer):
-        from geonode.base.utils import build_absolute_uri
+        try:
+            from geonode.utils import build_absolute_uri
+        except ImportError:
+            from geonode.base.utils import build_absolute_uri
         def get_attribute(kls, instance):
             thumbnail_url = instance.thumbnail_url
             if hasattr(instance, 'curatedthumbnail'):
@@ -924,3 +929,9 @@ class AppConfig(BaseAppConfig):
             return json_str
 
         ms2_config.convert = convert
+
+    def patch_profile_admin_actions(self, model):
+        """Add Profile user action"""
+        from undp_png.admin import make_user_active
+        if make_user_active not in model.actions:
+            model.actions.append(make_user_active)

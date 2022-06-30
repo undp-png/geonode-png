@@ -123,6 +123,11 @@ a {
 
 .navbar-nav .search input {
   border-radius: 0;
+  width: 200px;
+}
+
+.navbar-nav .search input:focus {
+  width: 200px;
 }
 
 .navbar-inverse {
@@ -139,6 +144,9 @@ a {
     font-weight: 500;
     color: @black;
     display: inline-block;
+    &:focus {
+      color: inherit;
+    }
   }
   & .navbar-nav.toolbar > li > a {
     position: relative;
@@ -714,11 +722,40 @@ footer {
   }
 }
 
+
+// training page
+
+.training {
+  .container a {
+    text-decoration: underline;
+  }
+  h2 {
+    color: @green;
+  }
+  .training-block {
+    display: grid;
+    grid-template-columns: 200px 1fr;
+    gap: 20px;
+    img {
+      width: 100%;
+      max-width: 200px;
+    }
+  }
+}
+
 // print overide
 
 .msgapi #mapstore-print-panel.modal-dialog {
   height: auto;
 }
+
+.video {
+  aspect-ratio: 16 / 9;
+  width: 100%;
+  max-width: 600px;
+}
+
+
 
 @media (min-width: 1450px) {
   .container {
@@ -793,6 +830,11 @@ footer {
       gap: 10px;
     }
   }
+  .training {
+    .training-block {
+      display: block;
+    }
+  }
 }
 
 @media (max-width: 475px) {
@@ -826,5 +868,10 @@ footer {
   .navbar-nav > li > .dropdown-menu {
     margin-top: 0;
   }
-
+  .training {
+    .training-block {
+      display: block;
+    }
+  }
 }
+

@@ -21,6 +21,7 @@ if [ "$LETSENCRYPT_MODE" == "staging" ]; then
 elif [ "$LETSENCRYPT_MODE" == "production" ]; then
     printf "\nTrying to get PRODUCTION certificate\n"
     certbot --config-dir "/geonode-certificates/$LETSENCRYPT_MODE" certonly --webroot -w "/geonode-certificates" -d "$HTTPS_HOST" -m "$ADMIN_EMAIL" --agree-tos --non-interactive --server https://acme-v02.api.letsencrypt.org/directory
+    certbot --config-dir "/geonode-certificates/$LETSENCRYPT_MODE" certonly --webroot -w "/geonode-certificates" -d "www.$HTTPS_HOST" -m "$ADMIN_EMAIL" --agree-tos --non-interactive --server https://acme-v02.api.letsencrypt.org/directory
 else
     printf "\nNot trying to get certificate (simulating failure, because LETSENCRYPT_MODE variable was neither staging nor production\n"
     /bin/false

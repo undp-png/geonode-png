@@ -46,6 +46,10 @@ if not SITEURL.endswith('/'):
 
 SITENAME = os.getenv("SITENAME", 'undp_png')
 
+# Allow proxy host now that we have switched debug off
+PROXY_HOST = os.getenv("HTTPS_HOST", 'png-geoportal.org')
+PROXY_ALLOWED_HOSTS = [PROXY_HOST, f'www.{PROXY_HOST}', 'geoserver']
+
 # Defines the directory that contains the settings file as the LOCAL_ROOT
 # It is used for relative settings elsewhere.
 LOCAL_ROOT = os.path.abspath(os.path.dirname(__file__))

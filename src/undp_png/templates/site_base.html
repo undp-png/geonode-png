@@ -19,7 +19,20 @@
 <!-- Add favicons below -->
 <link rel="shortcut icon" href="{% static 'favicon.ico' %}" type="image/x-icon"/>
 <link rel="icon" href="{% static 'favicon.ico' %}" type="image/x-icon">
+<link rel="apple-touch-icon" sizes="180x180" href="{% static '/apple-touch-icon.png' %}" >
+<link rel="icon" type="image/png" sizes="32x32" href="{% static ' /favicon-32x32.png' %}">
+<link rel="icon" type="image/png" sizes="16x16" href="{% static '/favicon-16x16.png' %}">
 <!-- Add google analytics below -->
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-510EYC61Q9"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-510EYC61Q9');
+</script>
+
 {% endblock %}
 
 <!-- Navbar -->
@@ -224,6 +237,7 @@
             <li class="menu-header">Further info</li>
             <li><a href="{% url "about" %}">{% trans "About" %}</a></li>
             <li><a href="{% url "faqs" %}">FAQs</a></li>
+            <li><a href="{% url "training" %}">Training</a></li>
           </ul>
         </div>
         <div class="col-md-3">

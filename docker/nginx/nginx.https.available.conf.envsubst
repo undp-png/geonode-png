@@ -5,10 +5,22 @@
 ssl_session_cache   shared:SSL:10m;
 ssl_session_timeout 10m;
 
+server {
+    listen              $HTTPS_PORT ssl;
+    server_name www.$HTTPS_HOST;
+
+    ssl_certificate     /certificate_symlink_www/fullchain.pem;
+    ssl_certificate_key /certificate_symlink_www/privkey.pem;
+    ssl_protocols       TLSv1 TLSv1.1 TLSv1.2;
+    ssl_ciphers         HIGH:!aNULL:!MD5;
+
+    return 301 $scheme://$HTTPS_HOST$request_uri;
+}
+
 # this is the actual HTTPS host
 server {
     listen              $HTTPS_PORT ssl;
-    server_name         $HTTPS_HOST;
+    server_name         $HTTPS_HOST www.$HTTPS_HOST;
     keepalive_timeout   70;
 
     ssl_certificate     /certificate_symlink/fullchain.pem;
@@ -22,7 +34,7 @@ server {
 # if we try to connect from http, we redirect to https
 server {
     listen 80;
-    server_name $HTTPS_HOST $HTTP_HOST; # TODO : once geoserver supports relative urls, we should allow access though both HTTP and HTTPS at the same time and hence remove HTTP_HOST from this line
+    server_name $HTTPS_HOST $HTTP_HOST www.$HTTPS_HOST; # TODO : once geoserver supports relative urls, we should allow access though both HTTP and HTTPS at the same time and hence remove HTTP_HOST from this line
     
     # Except for let's encrypt challenge
     location /.well-known {

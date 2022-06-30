@@ -91,6 +91,10 @@ a:hover {
 }
 .navbar-nav .search input {
   border-radius: 0;
+  width: 200px;
+}
+.navbar-nav .search input:focus {
+  width: 200px;
 }
 .navbar-inverse {
   background-color: #ffffff !important;
@@ -107,6 +111,9 @@ a:hover {
   font-weight: 500;
   color: #0C0C0C;
   display: inline-block;
+}
+.navbar-inverse .navbar-nav > li > a:focus {
+  color: inherit;
 }
 .navbar-inverse .navbar-nav.toolbar > li > a {
   position: relative;
@@ -655,8 +662,28 @@ footer .list-unstyled {
 .about .questions-block a {
   color: #f8b13d;
 }
+.training .container a {
+  text-decoration: underline;
+}
+.training h2 {
+  color: #679335;
+}
+.training .training-block {
+  display: grid;
+  grid-template-columns: 200px 1fr;
+  gap: 20px;
+}
+.training .training-block img {
+  width: 100%;
+  max-width: 200px;
+}
 .msgapi #mapstore-print-panel.modal-dialog {
   height: auto;
+}
+.video {
+  aspect-ratio: 16 / 9;
+  width: 100%;
+  max-width: 600px;
 }
 @media (min-width: 1450px) {
   .container {
@@ -718,6 +745,9 @@ footer .list-unstyled {
     grid-template-columns: 1fr;
     gap: 10px;
   }
+  .training .training-block {
+    display: block;
+  }
 }
 @media (max-width: 475px) {
   .home .jumbotron .main-title {
@@ -745,5 +775,8 @@ footer .list-unstyled {
   }
   .navbar-nav > li > .dropdown-menu {
     margin-top: 0;
+  }
+  .training .training-block {
+    display: block;
   }
 }
